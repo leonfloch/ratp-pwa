@@ -1,6 +1,6 @@
 {
-    "name": "Clima",
-    "short_name": "Clima",
+    "name": "Metro",
+    "short_name": "Metro",
     "icons": [{
       "src": "/images/icons/icon-128x128.png",
         "sizes": "128x128",
