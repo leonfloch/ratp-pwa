@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE_NAME = 'static-cache-v6';
+const CACHE_NAME = 'static-cache-v9';
 
 const FILES_TO_CACHE = [
     '/offline.html',    

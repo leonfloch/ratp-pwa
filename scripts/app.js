@@ -1,5 +1,22 @@
+
+
 (function () {
     'use strict';
+
+    var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
+
+    if (!('indexedDB' in window)) {
+        console.log('This browser doesn\'t support IndexedDB');
+        return;
+      }
+      
+      var dbPromise = indexedDB.open('metro-db', 1, function(upgradeDb) {
+        console.log('making a new object store');
+        if (!upgradeDb.objectStoreNames.contains('estaciones')) {
+          upgradeDb.createObjectStore('estaciones');
+        }
+      });
+      
 
     var app = {
         isLoading: true,
