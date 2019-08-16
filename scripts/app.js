@@ -3,20 +3,42 @@
 (function () {
     'use strict';
 
-    var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
 
     if (!('indexedDB' in window)) {
         console.log('This browser doesn\'t support IndexedDB');
         return;
-      }
-      
-      var dbPromise = indexedDB.open('metro-db', 1, function(upgradeDb) {
-        console.log('making a new object store');
-        if (!upgradeDb.objectStoreNames.contains('estaciones')) {
-          upgradeDb.createObjectStore('estaciones');
+    }
+
+    function openIndexedDB() {
+        // This works on all devices/browsers, and uses IndexedDBShim as a final fallback 
+        var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
+        var openDB = indexedDB.open("metro-db", 1);
+        openDB.onupgradeneeded = function () {
+            var db = {}
+            db.result = openDB.result;
+            db.store = db.result.createObjectStore("estaciones", { keyPath: "label" });
+        };
+        return openDB;
+    }
+
+    function getStoreIndexedDB(openDB) {
+        var db = {};
+        db.result = openDB.result;
+        db.tx = db.result.transaction("estaciones", "readwrite");
+        db.store = db.tx.objectStore("estaciones");
+        return db;
+    }
+
+    function saveIndexedDB(data, filedata) {
+        var openDB = openIndexedDB();
+        openDB.onsuccess = function () {
+            var db = getStoreIndexedDB(openDB);
+
+            db.store.put(data);
         }
-      });
-      
+        return true;
+    }
+
 
     var app = {
         isLoading: true,
@@ -56,7 +78,7 @@
             app.selectedTimetables = [];
         }
         app.getSchedule(key, label);
-        app.selectedTimetables.push({key: key, label: label});
+        app.selectedTimetables.push({ key: key, label: label });
         app.toggleAddDialog(false);
     });
 
@@ -105,10 +127,10 @@
         card.querySelector('.card-last-updated').textContent = data.created;
 
         var scheduleUIs = card.querySelectorAll('.schedule');
-        for(var i = 0; i<4; i++) {
+        for (var i = 0; i < 4; i++) {
             var schedule = schedules[i];
             var scheduleUI = scheduleUIs[i];
-            if(schedule && scheduleUI) {
+            if (schedule && scheduleUI) {
                 scheduleUI.querySelector('.message').textContent = schedule.message;
             }
         }
@@ -140,7 +162,9 @@
                     result.label = label;
                     result.created = response._metadata.date;
                     result.schedules = response.result.schedules;
-                    app.updateTimetableCard(result);
+                    saveIndexedDB(result);
+                    app.updateTimetableCard(result);                
+                    
                 }
             } else {
                 // Return the initial weather forecast since no data is available.
@@ -199,6 +223,6 @@
 
     app.getSchedule('metros/1/bastille/A', 'Bastille, Direction La Défense');
     app.selectedTimetables = [
-        {key: initialStationTimetable.key, label: initialStationTimetable.label}
+        { key: initialStationTimetable.key, label: initialStationTimetable.label }
     ];
 })();
