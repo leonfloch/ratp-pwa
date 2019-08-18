@@ -1,16 +1,18 @@
 'use strict';
 
-const CACHE_NAME = 'static-cache-v11';
-const DATA_CACHE_NAME = 'data-cache-v2';
+const CACHE_NAME = 'static-cache-v14';
+const DATA_CACHE_NAME = 'data-cache-v4';
 
 const FILES_TO_CACHE = [
     '/',
     '/index.html',
     '/offline.html',
     '/scripts/app.js',
+    '/scripts/install.js',
     '/styles/inline.css',
     '/images/ic_add_white_24px.svg',
-    '/images/ic_refresh_white_24px.svg'
+    '/images/ic_refresh_white_24px.svg',
+    '/images/install.svg'
 ];
 
 

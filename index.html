@@ -28,7 +28,7 @@
   <title>Paris Métro 1</title>
   <link rel="stylesheet" type="text/css" href="styles/inline.css">
 
-  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="manifest.json">
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -41,6 +41,7 @@
 
   <header class="header">
     <h1 class="header__title">Paris Métro 1</h1>
+    <button id="butInstall" aria-label="Install"></button>
     <button id="butRefresh" class="headerButton" aria-label="Refresh"></button>
     <button id="butAdd" class="headerButton" aria-label="Add"></button>
   </header>
@@ -108,7 +109,7 @@
 
   <!-- Uncomment the line below when ready to test with fake data -->
   <script src="scripts/app.js" async></script>
-
+  <script src="scripts/install.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
