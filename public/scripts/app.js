@@ -136,6 +136,7 @@
         }
 
         if (app.isLoading) {
+            window.cardLoadTime = performance.now();
             app.spinner.setAttribute('hidden', true);
             app.container.removeAttribute('hidden');
             app.isLoading = false;
@@ -150,6 +151,7 @@
 
 
     app.getSchedule = function (key, label) {
+        var initialTime = performance.now();
         var url = 'https://api-ratp.pierre-grimaud.fr/v3/schedules/' + key;
 
         var request = new XMLHttpRequest();
@@ -173,6 +175,8 @@
         };
         request.open('GET', url);
         request.send();
+        var finalTime = performance.now();        
+        window.getServiceTime = finalTime - initialTime;
     };
 
     // Iterate all of the cards and attempt to get the latest timetable data
@@ -220,8 +224,9 @@
      *   Instead, check out IDB (https://www.npmjs.com/package/idb) or
      *   SimpleDB (https://gist.github.com/inexorabletash/c8069c042b734519680c)
      ************************************************************************/
+    
+    app.getSchedule('metros/1/bastille/A', 'Bastille, Direction La Défense');    
 
-    app.getSchedule('metros/1/bastille/A', 'Bastille, Direction La Défense');
     app.selectedTimetables = [
         { key: initialStationTimetable.key, label: initialStationTimetable.label }
     ];
